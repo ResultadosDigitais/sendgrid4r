@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-$LOAD_PATH.unshift File.dirname(__FILE__)
 
 module SendGrid4r
   module Factory
@@ -10,7 +9,7 @@ module SendGrid4r
       def create(
         name:, subject: '<%subject%>',
         html_content: '<%body%>', plain_content: '<%body%>', active: 1)
-        SendGrid4r::REST::Templates::Versions::Version.new(
+        REST::TransactionalTemplates::Versions::Version.new(
           nil,
           nil,
           nil,

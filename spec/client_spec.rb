@@ -29,6 +29,13 @@ describe SendGrid4r::Client do
 
     describe 'methods' do
       it 'available' do
+        # Alerts
+        expect(@client.respond_to?('get_alerts')).to eq(true)
+        expect(@client.respond_to?('post_alert')).to eq(true)
+        expect(@client.respond_to?('get_alert')).to eq(true)
+        expect(@client.respond_to?('delete_alert')).to eq(true)
+        expect(@client.respond_to?('patch_alert')).to eq(true)
+
         # Subusers
         expect(@client.respond_to?('get_subusers')).to eq(true)
         expect(@client.respond_to?('post_subuser')).to eq(true)
@@ -45,7 +52,7 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('post_api_key')).to eq(true)
         expect(@client.respond_to?('delete_api_key')).to eq(true)
         expect(@client.respond_to?('patch_api_key')).to eq(true)
-        # Advanced Suppression Manager
+        # Suppression Management
         # groups
         expect(@client.respond_to?('get_groups')).to eq(true)
         expect(@client.respond_to?('get_group')).to eq(true)
@@ -55,9 +62,16 @@ describe SendGrid4r::Client do
         # suppressions
         expect(@client.respond_to?('post_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('get_suppressions')).to eq(true)
+        expect(@client.respond_to?('get_groups_by_email')).to eq(true)
         expect(@client.respond_to?('get_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('delete_suppressed_email')).to eq(true)
-        # global suppressions
+        expect(@client.respond_to?('search_suppressed_emails')).to eq(true)
+        # global unsubscribes
+        expect(@client.respond_to?('get_global_unsubscribes')).to eq(true)
+        expect(@client.respond_to?('post_global_unsubscribes')).to eq(true)
+        expect(@client.respond_to?('get_global_unsubscribe')).to eq(true)
+        expect(@client.respond_to?('delete_global_unsubscribe')).to eq(true)
+        # deprecated
         expect(@client.respond_to?('post_global_suppressed_emails')).to eq(true)
         expect(@client.respond_to?('get_global_suppressed_email')).to eq(true)
         expect(
@@ -121,8 +135,6 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_partner_settings')).to eq(true)
         expect(@client.respond_to?('get_settings_new_relic')).to eq(true)
         expect(@client.respond_to?('patch_settings_new_relic')).to eq(true)
-        expect(@client.respond_to?('get_settings_sendwithus')).to eq(true)
-        expect(@client.respond_to?('patch_settings_sendwithus')).to eq(true)
 
         # tracking
         expect(@client.respond_to?('get_tracking_settings')).to eq(true)
@@ -136,6 +148,13 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('patch_settings_open')).to eq(true)
         expect(@client.respond_to?('get_settings_subscription')).to eq(true)
         expect(@client.respond_to?('patch_settings_subscription')).to eq(true)
+
+        # Parse Webhooks
+        expect(@client.respond_to?('get_parse_settings')).to eq(true)
+        expect(@client.respond_to?('post_parse_setting')).to eq(true)
+        expect(@client.respond_to?('get_parse_setting')).to eq(true)
+        expect(@client.respond_to?('patch_parse_setting')).to eq(true)
+        expect(@client.respond_to?('delete_parse_setting')).to eq(true)
 
         # Template Engine
         # templates
@@ -158,6 +177,8 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_categories_stats_sums')).to eq(true)
         expect(@client.respond_to?('get_subusers_stats')).to eq(true)
         expect(@client.respond_to?('get_subusers_stats_sums')).to eq(true)
+        expect(@client.respond_to?('get_subusers_stats_monthly')).to eq(true)
+        expect(@client.respond_to?('get_subuser_stats_monthly')).to eq(true)
         expect(@client.respond_to?('get_geo_stats')).to eq(true)
         expect(@client.respond_to?('get_devices_stats')).to eq(true)
         expect(@client.respond_to?('get_clients_stats')).to eq(true)
@@ -254,12 +275,36 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_user_profile')).to eq(true)
         expect(@client.respond_to?('patch_user_profile')).to eq(true)
         expect(@client.respond_to?('get_user_account')).to eq(true)
+        expect(@client.respond_to?('get_user_email')).to eq(true)
+        expect(@client.respond_to?('put_user_email')).to eq(true)
+        expect(@client.respond_to?('get_user_username')).to eq(true)
+        expect(@client.respond_to?('put_user_username')).to eq(true)
+        expect(@client.respond_to?('get_user_credits')).to eq(true)
+        expect(@client.respond_to?('put_user_password')).to eq(true)
 
         # Bounces API
         expect(@client.respond_to?('get_bounces')).to eq(true)
         expect(@client.respond_to?('delete_bounces')).to eq(true)
         expect(@client.respond_to?('get_bounce')).to eq(true)
         expect(@client.respond_to?('delete_bounce')).to eq(true)
+
+        # Blocks API
+        expect(@client.respond_to?('get_blocks')).to eq(true)
+        expect(@client.respond_to?('delete_blocks')).to eq(true)
+        expect(@client.respond_to?('get_block')).to eq(true)
+        expect(@client.respond_to?('delete_block')).to eq(true)
+
+        # Invalid Emails API
+        expect(@client.respond_to?('get_invalid_emails')).to eq(true)
+        expect(@client.respond_to?('delete_invalid_emails')).to eq(true)
+        expect(@client.respond_to?('get_invalid_email')).to eq(true)
+        expect(@client.respond_to?('delete_invalid_email')).to eq(true)
+
+        # Spam Reports API
+        expect(@client.respond_to?('get_spam_reports')).to eq(true)
+        expect(@client.respond_to?('delete_spam_reports')).to eq(true)
+        expect(@client.respond_to?('get_spam_report')).to eq(true)
+        expect(@client.respond_to?('delete_spam_report')).to eq(true)
 
         # Cancel Scheduled Sends Api
         expect(@client.respond_to?('generate_batch_id')).to eq(true)
@@ -268,12 +313,34 @@ describe SendGrid4r::Client do
         expect(@client.respond_to?('get_scheduled_sends')).to eq(true)
         expect(@client.respond_to?('patch_scheduled_send')).to eq(true)
         expect(@client.respond_to?('delete_scheduled_send')).to eq(true)
+
+        # Api Keys
+        expect(@client.respond_to?('get_api_keys')).to eq(true)
+        expect(@client.respond_to?('post_api_key')).to eq(true)
+        expect(@client.respond_to?('get_api_key')).to eq(true)
+        expect(@client.respond_to?('delete_api_key')).to eq(true)
+        expect(@client.respond_to?('patch_api_key')).to eq(true)
+        expect(@client.respond_to?('put_api_key')).to eq(true)
+
+        # Permissions
+        expect(@client.respond_to?('get_permissions')).to eq(true)
+
+        # Ip Access Management
+        expect(@client.respond_to?('get_ip_activities')).to eq(true)
+        expect(@client.respond_to?('get_whitelisted_ips')).to eq(true)
+        expect(@client.respond_to?('post_whitelisted_ips')).to eq(true)
+        expect(@client.respond_to?('delete_whitelisted_ips')).to eq(true)
+        expect(@client.respond_to?('get_whitelisted_ip')).to eq(true)
+        expect(@client.respond_to?('delete_whitelisted_ip')).to eq(true)
+
+        # Mail
+        expect(@client.respond_to?('send')).to eq(true)
       end
     end
 
     describe 'VERSION' do
       it 'returns VERSION value' do
-        expect(SendGrid4r::VERSION).to eq('1.4.0')
+        expect(SendGrid4r::VERSION).to eq('1.15.0')
       end
     end
   end
